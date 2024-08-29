@@ -1,34 +1,55 @@
 import { React, useState, useEffect } from "react";
 import "./main.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSun,
+  faCloud,
+  faCloudSun,
+  faSmog,
+  faWind,
+  faCloudShowersHeavy,
+  faCloudRain,
+  faSnowflake,
+  faBolt,
+  faIcicles,
+  faTemperatureLow,
+} from "@fortawesome/free-solid-svg-icons";
 const weatherConditions = [];
 
 // Assigning weather conditions to their respective weather codes
-weatherConditions[1000] = "Clear Sky";
-weatherConditions[1001] = "Cloudy";
-weatherConditions[1100] = "Mostly Clear";
-weatherConditions[1101] = "Partly Cloudy";
-weatherConditions[1102] = "Mostly Cloudy";
-weatherConditions[2000] = "Fog";
-weatherConditions[2100] = "Light Fog";
-weatherConditions[3000] = "Light Wind";
-weatherConditions[3001] = "Wind";
-weatherConditions[3002] = "Strong Wind";
-weatherConditions[4000] = "Drizzle";
-weatherConditions[4001] = "Rain";
-weatherConditions[4200] = "Light Rain";
-weatherConditions[4201] = "Heavy Rain";
-weatherConditions[5000] = "Snow";
-weatherConditions[5001] = "Flurries";
-weatherConditions[5100] = "Light Snow";
-weatherConditions[5101] = "Heavy Snow";
-weatherConditions[6000] = "Freezing Drizzle";
-weatherConditions[6001] = "Freezing Rain";
-weatherConditions[6200] = "Light Freezing Rain";
-weatherConditions[6201] = "Heavy Freezing Rain";
-weatherConditions[7000] = "Ice Pellets";
-weatherConditions[7101] = "Heavy Ice Pellets";
-weatherConditions[7102] = "Light Ice Pellets";
-weatherConditions[8000] = "Thunderstorm";
+
+weatherConditions[1000] = { label: "Clear Sky", icon: faSun };
+weatherConditions[1001] = { label: "Cloudy", icon: faCloud };
+weatherConditions[1100] = { label: "Mostly Clear", icon: faCloudSun };
+weatherConditions[1101] = { label: "Partly Cloudy", icon: faCloudSun };
+weatherConditions[1102] = { label: "Mostly Cloudy", icon: faCloud };
+weatherConditions[2000] = { label: "Fog", icon: faSmog };
+weatherConditions[2100] = { label: "Light Fog", icon: faSmog };
+weatherConditions[3000] = { label: "Light Wind", icon: faWind };
+weatherConditions[3001] = { label: "Wind", icon: faWind };
+weatherConditions[3002] = { label: "Strong Wind", icon: faWind };
+weatherConditions[4000] = { label: "Drizzle", icon: faCloudShowersHeavy };
+weatherConditions[4001] = { label: "Rain", icon: faCloudRain };
+weatherConditions[4200] = { label: "Light Rain", icon: faCloudRain };
+weatherConditions[4201] = { label: "Heavy Rain", icon: faCloudShowersHeavy };
+weatherConditions[5000] = { label: "Snow", icon: faSnowflake };
+weatherConditions[5001] = { label: "Flurries", icon: faSnowflake };
+weatherConditions[5100] = { label: "Light Snow", icon: faSnowflake };
+weatherConditions[5101] = { label: "Heavy Snow", icon: faSnowflake };
+weatherConditions[6000] = { label: "Freezing Drizzle", icon: faIcicles };
+weatherConditions[6001] = { label: "Freezing Rain", icon: faTemperatureLow };
+weatherConditions[6200] = {
+  label: "Light Freezing Rain",
+  icon: faTemperatureLow,
+};
+weatherConditions[6201] = {
+  label: "Heavy Freezing Rain",
+  icon: faTemperatureLow,
+};
+weatherConditions[7000] = { label: "Ice Pellets", icon: faIcicles };
+weatherConditions[7101] = { label: "Heavy Ice Pellets", icon: faIcicles };
+weatherConditions[7102] = { label: "Light Ice Pellets", icon: faIcicles };
+weatherConditions[8000] = { label: "Thunderstorm", icon: faBolt };
 
 const Main = () => {
   const [currentWeather, setCurrentweather] = useState("");
@@ -36,6 +57,8 @@ const Main = () => {
   const [humidity, setHumidity] = useState("");
   const [precipitationProbability, setprecipitationProbability] = useState("");
   const [temperature, setTemperature] = useState("");
+  const [weatherIcon, setweatherIcon] = useState(faSun);
+
   const fetchCurrentweather = async (city) => {
     try {
       const apikey = process.env.REACT_APP_API_KEY;
@@ -47,8 +70,9 @@ const Main = () => {
       let currentWeather = weatherConditions[weatherCode];
       setHumidity(currentData.humidity);
       setprecipitationProbability(currentData.precipitationProbability);
-      setCurrentweather(currentWeather);
+      setCurrentweather(currentWeather.label);
       setTemperature(Math.ceil(currentData.temperature) + "°C");
+      setweatherIcon(currentWeather.icon);
     } catch (error) {
       console.log("Error..");
     }
@@ -75,6 +99,11 @@ const Main = () => {
         </button>
       </div>
       <div className="current-weather">
+        <FontAwesomeIcon
+          icon={weatherIcon}
+          size="6x"
+          style={{ color: "#fff" }}
+        />
         <h1>{temperature}</h1>
         <h3>{currentWeather}</h3>
         <h4>Humidity: {humidity}%</h4>
